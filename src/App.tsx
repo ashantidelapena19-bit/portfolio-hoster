@@ -14,6 +14,8 @@ import {
   useAntigravityScroll,
 } from './components/AntigravityScrollProvider';
 import { ColorSchemeDrawer } from './components/ColorSchemeDrawer';
+import { EditProfilePage } from './components/EditProfilePage';
+import { LoginPage } from './components/LoginPage';
 import { Navbar } from './components/Navbar';
 import { PortfolioModal } from './components/PortfolioModal';
 import { ShotCard } from './components/ShotCard';
@@ -23,12 +25,49 @@ import {
   STUDENT_PORTFOLIOS,
   StudentPortfolio,
 } from './data/portfolios';
+import {
+  type AuthSession,
+  fetchPublishedPortfolios,
+  GUEST_SESSION,
+  supabase,
+  syncUnifiedUserProfile,
+} from './lib/supabase';
 
 type SortOption = 'popular' | 'views' | 'roll';
 
 const ANTIGRAVITY_EASE = [0.22, 1, 0.36, 1] as const;
+const GUEST_STORAGE_KEY = 'se-class-a-guest-v1';
 
-function GalleryExperience() {
+function loadGuestMode(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.localStorage.getItem(GUEST_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function getNormalizedPath(): string {
+  if (typeof window === 'undefined') return '/';
+  const cleaned = window.location.pathname.replace(/\/+$/, '');
+  return cleaned === '' ? '/' : cleaned;
+}
+
+function GalleryExperience({
+  session,
+  portfolios,
+  onNavigateLogin,
+  onNavigateProfile,
+  onSwitchAccount,
+  onLogout,
+}: {
+  session: AuthSession | null;
+  portfolios: StudentPortfolio[];
+  onNavigateLogin: () => void;
+  onNavigateProfile: () => void;
+  onSwitchAccount: () => Promise<void>;
+  onLogout: () => Promise<void>;
+}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>('popular');
@@ -97,13 +136,14 @@ function GalleryExperience() {
 
   const filteredPortfolios = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    const list = STUDENT_PORTFOLIOS.filter((item) => {
+    const list = portfolios.filter((item) => {
       if (selectedSkill && !item.skills.includes(selectedSkill)) {
         return false;
       }
       if (!q) return true;
       return (
         item.studentName.toLowerCase().includes(q) ||
+        (item.username?.toLowerCase().includes(q) ?? false) ||
         item.projectTitle.toLowerCase().includes(q) ||
         item.roleTitle.toLowerCase().includes(q) ||
         item.discipline.toLowerCase().includes(q) ||
@@ -113,6 +153,9 @@ function GalleryExperience() {
 
     return [...list].sort((a, b) => {
       if (sortBy === 'popular') {
+        if (a.isPublishedCommunity !== b.isPublishedCommunity) {
+          return a.isPublishedCommunity ? -1 : 1;
+        }
         const likesA = a.likes + (likedIds[a.id] ? 1 : 0);
         const likesB = b.likes + (likedIds[b.id] ? 1 : 0);
         return likesB - likesA;
@@ -122,16 +165,22 @@ function GalleryExperience() {
       }
       return a.rollNumber.localeCompare(b.rollNumber);
     });
-  }, [searchQuery, selectedSkill, sortBy, likedIds]);
+  }, [portfolios, searchQuery, selectedSkill, sortBy, likedIds]);
 
   const totalViews = useMemo(
-    () => STUDENT_PORTFOLIOS.reduce((acc, p) => acc + p.views, 0),
-    []
+    () => portfolios.reduce((acc, p) => acc + p.views, 0),
+    [portfolios]
   );
 
   return (
     <div id="top" className="min-h-screen flex flex-col bg-[var(--p-bg)] text-[var(--p-ink)] transition-colors duration-200">
-      <Navbar onOpenRoster={() => setRosterOpen(true)} />
+      <Navbar
+        session={session}
+        onNavigateLogin={onNavigateLogin}
+        onNavigateProfile={onNavigateProfile}
+        onSwitchAccount={onSwitchAccount}
+        onLogout={onLogout}
+      />
 
       {/* Editorial Dribbble-Inspired Hero + Search with Antigravity Entrance & Parallax */}
       <section
@@ -148,7 +197,7 @@ function GalleryExperience() {
             transition={{ duration: 0.6, delay: 0.04, ease: ANTIGRAVITY_EASE }}
             className="text-[13px] font-medium text-[var(--p-muted)] mb-3"
           >
-            2026 Cohort Showcase · {STUDENT_PORTFOLIOS.length} Standalone Student Sites ·{' '}
+            2026 Cohort Showcase · {portfolios.length} Student Portfolios ·{' '}
             <span className="tabular-nums">{totalViews.toLocaleString()}</span> Portfolio Views
           </motion.p>
           <motion.h1
@@ -222,7 +271,7 @@ function GalleryExperience() {
         >
           <div className="flex items-center gap-3">
             <span className="text-[13px] font-medium text-[var(--p-muted)] tabular-nums">
-              {filteredPortfolios.length} of {STUDENT_PORTFOLIOS.length} Portfolios
+              {filteredPortfolios.length} of {portfolios.length} Portfolios
             </span>
             {selectedSkill && (
               <button
@@ -307,7 +356,7 @@ function GalleryExperience() {
       </section>
 
       <SkillsAndContributors
-        portfolios={STUDENT_PORTFOLIOS}
+        portfolios={portfolios}
         selectedSkill={selectedSkill}
         onSelectSkill={setSelectedSkill}
         onSelectPortfolio={setActivePortfolio}
@@ -345,12 +394,36 @@ function GalleryExperience() {
             >
               Color Schemes
             </button>
+            <a
+              href="/profile"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateProfile();
+              }}
+              className="hover:text-[var(--p-ink)] transition-colors"
+            >
+              Edit Profile
+            </a>
+            <a
+              href="/login"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateLogin();
+              }}
+              className="hover:text-[var(--p-ink)] transition-colors"
+            >
+              {session?.mode === 'authenticated'
+                ? `Account (${session.displayName.split(' ')[0]})`
+                : session?.mode === 'guest'
+                  ? 'Guest Mode'
+                  : 'Login'}
+            </a>
             <button
               type="button"
               onClick={() => setRosterOpen(true)}
               className="hover:text-[var(--p-ink)] transition-colors cursor-pointer"
             >
-              All 9 Sites
+              All Sites
             </button>
           </div>
         </div>
@@ -359,7 +432,7 @@ function GalleryExperience() {
       {/* Embedded Standalone Website Preview Modal */}
       <PortfolioModal
         portfolio={activePortfolio}
-        allPortfolios={STUDENT_PORTFOLIOS}
+        allPortfolios={portfolios}
         onClose={() => setActivePortfolio(null)}
         onNavigate={(next) => setActivePortfolio(next)}
       />
@@ -472,10 +545,201 @@ function GalleryExperience() {
 }
 
 export default function App() {
+  const [pathname, setPathname] = useState<string>(getNormalizedPath);
+  const [authSession, setAuthSession] = useState<AuthSession | null>(null);
+  const [isGuest, setIsGuest] = useState<boolean>(loadGuestMode);
+  const [authLoading, setAuthLoading] = useState<boolean>(Boolean(supabase));
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState<boolean>(false);
+  const [publishedPortfolios, setPublishedPortfolios] = useState<StudentPortfolio[]>([]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPathname(getNormalizedPath());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigate = (to: '/' | '/login' | '/profile') => {
+    if (getNormalizedPath() !== to) {
+      window.history.pushState({}, '', to);
+      setPathname(to);
+    }
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
+
+  const refreshPublishedPortfolios = async () => {
+    const list = await fetchPublishedPortfolios();
+    setPublishedPortfolios(list);
+  };
+
+  useEffect(() => {
+    void refreshPublishedPortfolios();
+  }, []);
+
+  useEffect(() => {
+    if (!supabase) {
+      setAuthLoading(false);
+      return;
+    }
+
+    let mounted = true;
+    const urlLooksLikeRecovery =
+      window.location.hash.includes('type=recovery') ||
+      new URLSearchParams(window.location.search).get('type') === 'recovery';
+
+    if (urlLooksLikeRecovery) {
+      setIsPasswordRecovery(true);
+      if (getNormalizedPath() !== '/login') {
+        window.history.replaceState({}, '', '/login');
+        setPathname('/login');
+      }
+    }
+
+    const applySupabaseUser = async (
+      user: import('@supabase/supabase-js').User | null
+    ) => {
+      if (!mounted) return;
+      if (!user) {
+        setAuthSession(null);
+        setAuthLoading(false);
+        return;
+      }
+      const synced = await syncUnifiedUserProfile(user);
+      if (!mounted) return;
+      setAuthSession(synced);
+      setIsGuest(false);
+      try {
+        window.localStorage.removeItem(GUEST_STORAGE_KEY);
+      } catch {
+        // Ignore storage errors
+      }
+      setAuthLoading(false);
+    };
+
+    void supabase.auth.getSession().then(({ data }) => {
+      void applySupabaseUser(data.session?.user ?? null);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, nextSupaSession) => {
+      if (!mounted) return;
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsPasswordRecovery(true);
+        if (getNormalizedPath() !== '/login') {
+          window.history.pushState({}, '', '/login');
+          setPathname('/login');
+        }
+      }
+      if (event === 'SIGNED_OUT') {
+        setAuthSession(null);
+        setIsPasswordRecovery(false);
+        setAuthLoading(false);
+        return;
+      }
+      void applySupabaseUser(nextSupaSession?.user ?? null);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleContinueAsGuest = () => {
+    setIsGuest(true);
+    try {
+      window.localStorage.setItem(GUEST_STORAGE_KEY, 'true');
+    } catch {
+      // Ignore storage errors
+    }
+  };
+
+  const handleExitGuest = () => {
+    setIsGuest(false);
+    try {
+      window.localStorage.removeItem(GUEST_STORAGE_KEY);
+    } catch {
+      // Ignore storage errors
+    }
+  };
+
+  const handleLogout = async () => {
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+    setAuthSession(null);
+    handleExitGuest();
+  };
+
+  const handleSwitchAccount = async () => {
+    await handleLogout();
+    navigate('/login');
+  };
+
+  const handleProfileSaved = (updated: {
+    displayName: string;
+    username?: string;
+    avatarUrl?: string;
+    portfolioUrl?: string;
+  }) => {
+    setAuthSession((prev) =>
+      prev
+        ? {
+            ...prev,
+            displayName: updated.displayName,
+            username: updated.username,
+            avatarUrl: updated.avatarUrl,
+            portfolioUrl: updated.portfolioUrl,
+          }
+        : prev
+    );
+  };
+
+  const activeSession: AuthSession | null =
+    authSession ?? (isGuest ? GUEST_SESSION : null);
+
+  const combinedPortfolios = useMemo(
+    () => [...publishedPortfolios, ...STUDENT_PORTFOLIOS],
+    [publishedPortfolios]
+  );
+
   return (
     <ThemeProvider>
       <AntigravityScrollProvider>
-        <GalleryExperience />
+        {pathname === '/login' ? (
+          <LoginPage
+            session={activeSession}
+            authLoading={authLoading}
+            isPasswordRecovery={isPasswordRecovery}
+            onContinueAsGuest={handleContinueAsGuest}
+            onExitGuest={handleExitGuest}
+            onLogout={handleLogout}
+            onCompletePasswordRecovery={() => setIsPasswordRecovery(false)}
+            onNavigateGallery={() => navigate('/')}
+            onNavigateProfile={() => navigate('/profile')}
+          />
+        ) : pathname === '/profile' ? (
+          <EditProfilePage
+            session={activeSession}
+            onProfileSaved={handleProfileSaved}
+            onRefreshGalleryPortfolios={refreshPublishedPortfolios}
+            onNavigateGallery={() => navigate('/')}
+            onNavigateLogin={() => navigate('/login')}
+            onSwitchAccount={handleSwitchAccount}
+            onLogout={handleLogout}
+          />
+        ) : (
+          <GalleryExperience
+            session={activeSession}
+            portfolios={combinedPortfolios}
+            onNavigateLogin={() => navigate('/login')}
+            onNavigateProfile={() => navigate('/profile')}
+            onSwitchAccount={handleSwitchAccount}
+            onLogout={handleLogout}
+          />
+        )}
       </AntigravityScrollProvider>
     </ThemeProvider>
   );

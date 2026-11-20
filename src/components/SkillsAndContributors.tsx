@@ -3,6 +3,7 @@ import { ArrowUpRight, FolderCode } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 import { CLASS_TECH_STACK, StudentPortfolio } from '../data/portfolios';
 import { useAntigravityScroll } from './AntigravityScrollProvider';
+import { SocialLinksBar } from './SocialLinksBar';
 
 interface SkillsAndContributorsProps {
   portfolios: StudentPortfolio[];
@@ -144,17 +145,26 @@ export const SkillsAndContributors: React.FC<SkillsAndContributorsProps> = ({
                 <div>
                   <div className="flex items-center gap-4">
                     <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center text-base font-bold text-white shrink-0 select-none"
+                      className="w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center text-base font-bold text-white shrink-0 select-none"
                       style={{ backgroundColor: student.avatarColor }}
                     >
-                      {student.initials}
+                      {student.avatarUrl ? (
+                        <img
+                          src={student.avatarUrl}
+                          alt={student.studentName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        student.initials
+                      )}
                     </div>
                     <div className="min-w-0">
                       <h3 className="text-[16px] font-bold text-[var(--p-ink)] truncate">
                         {student.studentName}
                       </h3>
                       <p className="text-[13px] text-[var(--p-muted)] truncate">
-                        {student.rollNumber} · {student.roleTitle}
+                        {student.username ? `@${student.username}` : student.rollNumber} ·{' '}
+                        {student.roleTitle}
                       </p>
                     </div>
                   </div>
@@ -162,6 +172,12 @@ export const SkillsAndContributors: React.FC<SkillsAndContributorsProps> = ({
                   <p className="text-[14px] text-[var(--p-ink-secondary)] mt-4 leading-relaxed">
                     {student.projectSummary}
                   </p>
+
+                  {student.socialLinks && (
+                    <div className="mt-3.5">
+                      <SocialLinksBar links={student.socialLinks} size="sm" />
+                    </div>
+                  )}
 
                   <div className="mt-3 text-[12px] text-[var(--p-muted)]">
                     {student.highlights.join(' · ')}
@@ -174,17 +190,25 @@ export const SkillsAndContributors: React.FC<SkillsAndContributorsProps> = ({
                     onClick={() => onSelectPortfolio(student)}
                     className="text-[13px] font-semibold text-[var(--p-ink)] hover:text-[var(--p-accent)] transition-colors cursor-pointer whitespace-nowrap"
                   >
-                    Preview Site
+                    {student.portfolioUrl ? 'Preview Site' : 'View Portfolio'}
                   </button>
-                  <a
-                    href={student.portfolioUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[13px] font-medium text-[var(--p-muted)] hover:text-[var(--p-ink)] transition-colors whitespace-nowrap"
-                  >
-                    <span>Open index.html</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
+                  {student.portfolioUrl ? (
+                    <a
+                      href={student.portfolioUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[13px] font-medium text-[var(--p-muted)] hover:text-[var(--p-ink)] transition-colors whitespace-nowrap"
+                    >
+                      <span>
+                        {student.isPublishedCommunity ? 'Open Site' : 'Open index.html'}
+                      </span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  ) : (
+                    <span className="text-[12px] text-[var(--p-muted)]">
+                      Published Showcase
+                    </span>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -221,17 +245,19 @@ export const SkillsAndContributors: React.FC<SkillsAndContributorsProps> = ({
             </div>
             <div className="pl-6 text-[var(--p-muted)]">student-portfolios/</div>
             <div className="pl-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
-              {portfolios.map((p) => (
-                <a
-                  key={p.id}
-                  href={p.portfolioUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[var(--p-accent)] transition-colors truncate"
-                >
-                  {p.folderName}/index.html
-                </a>
-              ))}
+              {portfolios
+                .filter((p) => !p.isPublishedCommunity)
+                .map((p) => (
+                  <a
+                    key={p.id}
+                    href={p.portfolioUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[var(--p-accent)] transition-colors truncate"
+                  >
+                    {p.folderName}/index.html
+                  </a>
+                ))}
             </div>
           </div>
         </motion.div>

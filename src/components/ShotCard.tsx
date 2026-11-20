@@ -82,7 +82,7 @@ export const ShotCard: React.FC<ShotCardProps> = ({
             aria-label={`Preview ${item.studentName}'s portfolio: ${item.projectTitle}`}
             className="group relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-[var(--p-surface)] border border-[var(--p-border)] cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)]"
           >
-            {!imgError ? (
+            {item.thumbnail && !imgError ? (
               <motion.div
                 style={shouldReduceMotion ? undefined : { y: imageParallaxY }}
                 className="w-full h-full scale-[1.06] will-change-transform"
@@ -101,7 +101,14 @@ export const ShotCard: React.FC<ShotCardProps> = ({
                 className={`w-full h-full bg-gradient-to-br ${item.fallbackGradient} flex flex-col items-center justify-center p-6 text-center`}
               >
                 <Layers className="w-8 h-8 text-white/80 mb-2" />
-                <span className="text-sm font-semibold text-white">{item.projectTitle}</span>
+                <span className="text-sm font-semibold text-white line-clamp-2">
+                  {item.projectTitle}
+                </span>
+                {item.username && (
+                  <span className="text-[11px] text-white/70 mt-1">
+                    @{item.username}
+                  </span>
+                )}
               </div>
             )}
 
@@ -132,16 +139,18 @@ export const ShotCard: React.FC<ShotCardProps> = ({
                 >
                   <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
                 </button>
-                <a
-                  href={item.portfolioUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Open ${item.studentName}'s standalone portfolio in new tab`}
-                  className="w-9 h-9 rounded-full bg-white text-[#0D0C22] hover:bg-[#F3F3F6] flex items-center justify-center transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                </a>
+                {item.portfolioUrl && (
+                  <a
+                    href={item.portfolioUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    aria-label={`Open ${item.studentName}'s standalone portfolio in new tab`}
+                    className="w-9 h-9 rounded-full bg-white text-[#0D0C22] hover:bg-[#F3F3F6] flex items-center justify-center transition-colors"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -154,17 +163,25 @@ export const ShotCard: React.FC<ShotCardProps> = ({
               className="flex items-center gap-2 min-w-0 text-left group/meta cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--p-accent)] rounded"
             >
               <span
-                className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 select-none"
+                className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center text-[10px] font-bold text-white shrink-0 select-none"
                 style={{ backgroundColor: item.avatarColor }}
                 aria-hidden="true"
               >
-                {item.initials}
+                {item.avatarUrl ? (
+                  <img
+                    src={item.avatarUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  item.initials
+                )}
               </span>
               <span className="text-[14px] font-semibold text-[var(--p-ink)] group-hover/meta:text-[var(--p-accent)] transition-colors truncate">
                 {item.studentName}
               </span>
               <span className="hidden xl:inline text-[12px] text-[var(--p-muted)] whitespace-nowrap shrink-0">
-                · {item.discipline}
+                · {item.username ? `@${item.username}` : item.discipline}
               </span>
             </button>
 

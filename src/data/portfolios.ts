@@ -1,3 +1,5 @@
+import type { SocialLinks } from '../components/SocialLinksBar';
+
 export type Discipline =
   | 'All'
   | 'Full-Stack'
@@ -10,6 +12,8 @@ export interface StudentPortfolio {
   id: string;
   rollNumber: string;
   studentName: string;
+  username?: string;
+  bio?: string;
   firstName: string;
   lastName: string;
   folderName: string;
@@ -21,6 +25,7 @@ export interface StudentPortfolio {
   thumbnail: string;
   fallbackGradient: string;
   avatarColor: string;
+  avatarUrl?: string;
   initials: string;
   skills: string[];
   likes: number;
@@ -28,6 +33,9 @@ export interface StudentPortfolio {
   year: string;
   highlights: string[];
   githubHandle: string;
+  socialLinks?: SocialLinks;
+  isPublishedCommunity?: boolean;
+  publishedAt?: string;
 }
 
 export const DISCIPLINES: Discipline[] = [
