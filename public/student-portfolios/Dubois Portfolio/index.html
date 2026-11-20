@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chloe Dubois — Creative Coding & WebGL | SE Class A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg: #141413; --card: #1d1d1b; --border: rgba(255,255,255,0.1); --ink: #f5f5f4; --muted: #a8a29e; --violet: #8b5cf6; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid var(--border); background: rgba(20,20,19,0.92); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 20; }
+    .nav { display: flex; justify-content: space-between; align-items: center; height: 68px; }
+    .nav-links { display: flex; gap: 24px; color: var(--muted); font-size: 0.9rem; }
+    .back-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font-size: 0.85rem; }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .hero h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.1; margin: 12px 0 18px; text-wrap: balance; }
+    .hero p { color: var(--muted); margin-bottom: 24px; }
+    .btn-violet { background: var(--violet); color: #fff; padding: 11px 22px; border-radius: 8px; font-weight: 600; display: inline-block; }
+    .hero-img { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4/3; }
+    .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+    .shader-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 20px; }
+    canvas { width: 100%; height: 240px; border-radius: 10px; background: #0c0c0b; display: block; border: 1px solid var(--border); }
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+    .controls label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+    .controls input { width: 100%; accent-color: var(--violet); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    footer { padding: 36px 0; display: flex; justify-content: space-between; color: var(--muted); font-size: 0.88rem; }
+    @media (max-width: 900px) { .hero, .controls, .grid-3 { grid-template-columns: 1fr; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#top" style="font-weight:700; font-size:1.05rem;">Chloe Dubois</a>
+      <nav class="nav-links">
+        <a href="#shader-lab">Wave Canvas</a>
+        <a href="#projects">Projects</a>
+        <a href="#stack">Graphics Stack</a>
+      </nav>
+      <a href="../../index.html" id="back-gallery" class="back-btn">← Class A Gallery</a>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <div class="hero">
+      <div>
+        <div style="font-size:0.85rem; color:var(--muted);">Software Engineering Class A · Roll SE-A-09 · Graphics & Creative Coding</div>
+        <h1>Sculptural shaders, procedural geometry, and interactive canvases.</h1>
+        <p>I craft WebGL tools, GLSL fragment editors, and deterministic generative systems that run smoothly at 60fps.</p>
+        <a href="#shader-lab" class="btn-violet">Adjust Topographic Uniforms</a>
+      </div>
+      <div class="hero-img">
+        <img src="/src/assets/images/shot_dubois_atelier_1795057298220.jpg" alt="Atelier GLSL Shader Workbench" referrerpolicy="no-referrer" />
+      </div>
+    </div>
+
+    <section id="shader-lab">
+      <h2>Atelier Topographic Wave Sketch</h2>
+      <p style="color:var(--muted); margin-top:6px;">Real-time procedural contour lines driven by amplitude and frequency uniforms.</p>
+      <div class="shader-box">
+        <canvas id="wave-canvas"></canvas>
+        <div class="controls">
+          <div>
+            <label class="mono" for="amp">u_amplitude: <span id="amp-val">26</span></label>
+            <input id="amp" type="range" min="6" max="48" value="26" />
+          </div>
+          <div>
+            <label class="mono" for="freq">u_frequency: <span id="freq-val">0.018</span></label>
+            <input id="freq" type="range" min="8" max="40" value="18" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Graphics & Shader Work</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Atelier Shader Canvas</h3><p style="color:var(--muted); margin-top:8px;">Node-based GLSL sandbox with live uniform sliders and PNG/WebM sequence export.</p></div>
+        <div class="card"><h3>SDF Raymarcher</h3><p style="color:var(--muted); margin-top:8px;">Signed distance field boolean modeling engine compiled to WebGL 2.</p></div>
+        <div class="card"><h3>AudioContour Synth</h3><p style="color:var(--muted); margin-top:8px;">Web Audio FFT analyzer driving real-time topographic mesh deformations.</p></div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <h2>Graphics Stack</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Shaders & 3D</h3><p style="color:var(--muted); margin-top:8px;">GLSL, WebGL 2, Three.js, Canvas 2D</p></div>
+        <div class="card"><h3>Frontend</h3><p style="color:var(--muted); margin-top:8px;">TypeScript, React, Tailwind CSS</p></div>
+        <div class="card"><h3>Exhibitions</h3><p style="color:var(--muted); margin-top:8px;">SE Department Digital Gallery Showcase 2026</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Chloe Dubois · Software Engineering Class A</span>
+      <span class="mono">github.com/cdubois-glsl · c.dubois@se-class-a.edu</span>
+    </footer>
+  </main>
+  <script>
+    if (window.self !== window.top) document.getElementById('back-gallery').style.display = 'none';
+    const canvas = document.getElementById('wave-canvas');
+    const ctx = canvas.getContext('2d');
+    const ampInput = document.getElementById('amp');
+    const freqInput = document.getElementById('freq');
+    let t = 0;
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * (window.devicePixelRatio || 1);
+      canvas.height = rect.height * (window.devicePixelRatio || 1);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function draw() {
+      const w = canvas.width;
+      const h = canvas.height;
+      const amp = Number(ampInput.value);
+      const freq = Number(freqInput.value) / 1000;
+      document.getElementById('amp-val').textContent = amp;
+      document.getElementById('freq-val').textContent = freq.toFixed(3);
+
+      ctx.fillStyle = '#0c0c0b';
+      ctx.fillRect(0, 0, w, h);
+      const lines = 14;
+      for (let l = 0; l < lines; l++) {
+        ctx.beginPath();
+        const baseY = (h / (lines + 1)) * (l + 1);
+        ctx.strokeStyle = l % 3 === 0 ? 'rgba(139, 92, 246, 0.72)' : 'rgba(245, 245, 244, 0.28)';
+        ctx.lineWidth = 1.5;
+        for (let x = 0; x <= w; x += 6) {
+          const y = baseY + Math.sin(x * freq + t + l * 0.45) * amp + Math.cos(x * freq * 0.5 - t * 0.7) * (amp * 0.4);
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      t += 0.025;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>

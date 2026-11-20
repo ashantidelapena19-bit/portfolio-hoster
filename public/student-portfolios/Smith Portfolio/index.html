@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elena Smith — Design Systems & UI Engineering | SE Class A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #faf8f5;
+      --card: #ffffff;
+      --ink: #18181b;
+      --muted: #64646b;
+      --hairline: rgba(24,24,27,0.1);
+      --accent: #ea4c89;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    h1, h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; letter-spacing: -0.02em; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid var(--hairline); background: rgba(250,248,245,0.92); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 20; }
+    .nav { display: flex; justify-content: space-between; align-items: center; height: 68px; gap: 24px; }
+    .brand { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; }
+    .nav-links { display: flex; gap: 28px; font-size: 0.92rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--ink); }
+    .back-link { padding: 8px 16px; border: 1px solid var(--hairline); border-radius: 8px; background: var(--card); font-size: 0.85rem; font-weight: 500; }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--hairline); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .kicker { font-size: 0.85rem; color: var(--muted); margin-bottom: 14px; }
+    .hero h1 { font-size: clamp(2.4rem, 4.2vw, 3.6rem); line-height: 1.08; margin-bottom: 20px; text-wrap: balance; }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 52ch; margin-bottom: 28px; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary { background: var(--ink); color: #fff; padding: 11px 22px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; }
+    .btn-outline { background: var(--card); color: var(--ink); padding: 11px 22px; border-radius: 8px; font-weight: 500; font-size: 0.9rem; border: 1px solid var(--hairline); cursor: pointer; }
+    .showcase-frame { border-radius: 16px; overflow: hidden; border: 1px solid var(--hairline); background: var(--card); aspect-ratio: 4/3; }
+    .showcase-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    section { padding: 64px 0; border-bottom: 1px solid var(--hairline); }
+    .section-title { font-size: 1.9rem; margin-bottom: 8px; }
+    .section-sub { color: var(--muted); margin-bottom: 32px; }
+    .studio-panel { background: var(--card); border: 1px solid var(--hairline); border-radius: 16px; padding: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+    .swatch-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .swatch-btn { width: 42px; height: 42px; border-radius: 10px; border: 2px solid transparent; cursor: pointer; }
+    .swatch-btn.active { border-color: var(--ink); transform: scale(1.06); }
+    .preview-card { padding: 28px; border-radius: 12px; transition: background 180ms ease, color 180ms ease; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .work-card { background: var(--card); border: 1px solid var(--hairline); border-radius: 14px; padding: 24px; }
+    .work-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .work-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 14px; }
+    .meta { font-size: 0.82rem; color: var(--muted); }
+    footer { padding: 36px 0; display: flex; justify-content: space-between; color: var(--muted); font-size: 0.88rem; }
+    @media (max-width: 900px) {
+      .hero, .studio-panel, .grid-3 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#top" class="brand">Elena Smith</a>
+      <nav class="nav-links">
+        <a href="#tokens">Token Lab</a>
+        <a href="#case-studies">Case Studies</a>
+        <a href="#craft">UI Craft</a>
+      </nav>
+      <a href="../../index.html" id="back-gallery" class="back-link">← Class A Gallery</a>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <div class="hero">
+      <div>
+        <div class="kicker">Software Engineering Class A · Roll SE-A-02 · Design Systems</div>
+        <h1>Crafting accessible interfaces with typographic precision.</h1>
+        <p>
+          I bridge engineering rigor and editorial design. My work in Software Engineering Class A centers on
+          WCAG-compliant React component libraries, token pipelines, and zero-jank CSS architecture.
+        </p>
+        <div class="actions">
+          <a href="#tokens" class="btn-primary">Try Chroma Token Lab</a>
+          <button class="btn-outline" id="copy-btn">e.smith@se-class-a.edu</button>
+        </div>
+      </div>
+      <div class="showcase-frame">
+        <img src="/src/assets/images/shot_smith_chroma_1795057297767.jpg" alt="Chroma Design System Specimen" referrerpolicy="no-referrer" />
+      </div>
+    </div>
+
+    <section id="tokens">
+      <h2 class="section-title">Chroma Contrast & Token Workbench</h2>
+      <p class="section-sub">Select a semantic surface token below to verify real-time WCAG AA/AAA luminance pairing.</p>
+      <div class="studio-panel">
+        <div>
+          <h3>01. Surface Palette Selector</h3>
+          <p class="meta" style="margin-top:6px;">Click a swatch to preview token contrast ratio and recommended ink pairing.</p>
+          <div class="swatch-row" id="swatches"></div>
+          <p class="mono meta" id="token-readout" style="margin-top:18px;"></p>
+        </div>
+        <div class="preview-card" id="preview-card">
+          <div class="mono" style="font-size:0.78rem; opacity:0.8; margin-bottom:8px;">COMPONENT SPECIMEN</div>
+          <h3 style="font-family:'Fraunces',serif; font-size:1.5rem; margin-bottom:8px;">Accessible Card Surface</h3>
+          <p style="font-size:0.95rem; opacity:0.9;">
+            Semantic tokens ensure every heading, body paragraph, and interactive button passes 4.5:1 contrast automatically.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="case-studies">
+      <h2 class="section-title">Selected Projects</h2>
+      <p class="section-sub">Production design systems and frontend engineering artifacts.</p>
+      <div class="grid-3">
+        <div class="work-card">
+          <h3>Chroma Tokens Studio</h3>
+          <p>CLI and web compiler generating CSS custom properties, Tailwind themes, and WCAG audit reports from JSON.</p>
+          <div class="meta">TypeScript · React · Tailwind CSS</div>
+        </div>
+        <div class="work-card">
+          <h3>AriaKit Table Primitives</h3>
+          <p>Keyboard-navigable virtualized data grid with screen-reader announcements and column resizing.</p>
+          <div class="meta">React · WAI-ARIA · CSS Grid</div>
+        </div>
+        <div class="work-card">
+          <h3>Monograph Type Scale</h3>
+          <p>Fluid clamp() typography calculator balancing optical reading measure across mobile and 4K displays.</p>
+          <div class="meta">TypeScript · PostCSS · SVG</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="craft">
+      <h2 class="section-title">Engineering Focus</h2>
+      <div class="grid-3" style="margin-top:24px;">
+        <div class="work-card">
+          <h3>Accessibility</h3>
+          <p>WCAG 2.2 AA auditing, focus-visible ring architecture, and reduced-motion orchestration.</p>
+        </div>
+        <div class="work-card">
+          <h3>Frontend Systems</h3>
+          <p>React 19, TypeScript strict mode, Design Token JSON schemas, Storybook documentation.</p>
+        </div>
+        <div class="work-card">
+          <h3>Visual Craft</h3>
+          <p>Editorial typography pairing, 60-30-10 color balance, and sub-200ms compositor animations.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Elena Smith · Software Engineering Class A</span>
+      <span class="mono">github.com/esmith-ui · Best UI Craft Award 2026</span>
+    </footer>
+  </main>
+
+  <script>
+    if (window.self !== window.top) {
+      document.getElementById('back-gallery').style.display = 'none';
+    }
+    const copyBtn = document.getElementById('copy-btn');
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard?.writeText('e.smith@se-class-a.edu');
+      copyBtn.textContent = 'Copied Email';
+      setTimeout(() => { copyBtn.textContent = 'e.smith@se-class-a.edu'; }, 1800);
+    });
+
+    const themes = [
+      { name: 'Porcelain Paper', bg: '#F4F1EA', fg: '#18181B', ratio: '15.4:1 (AAA)' },
+      { name: 'Dribbble Ink', bg: '#0D0C22', fg: '#FFFFFF', ratio: '18.9:1 (AAA)' },
+      { name: 'Studio Rose', bg: '#EA4C89', fg: '#FFFFFF', ratio: '4.6:1 (AA)' },
+      { name: 'Cobalt Blueprint', bg: '#1D4ED8', fg: '#FFFFFF', ratio: '6.7:1 (AA+)' },
+      { name: 'Slate Mist', bg: '#E2E8F0', fg: '#0F172A', ratio: '13.2:1 (AAA)' }
+    ];
+    let activeIdx = 0;
+
+    function renderTokens() {
+      const swatchRoot = document.getElementById('swatches');
+      swatchRoot.innerHTML = themes.map((t, i) =>
+        `<button class="swatch-btn ${i === activeIdx ? 'active' : ''}" style="background:${t.bg};" aria-label="${t.name}" data-i="${i}"></button>`
+      ).join('');
+      const current = themes[activeIdx];
+      const card = document.getElementById('preview-card');
+      card.style.background = current.bg;
+      card.style.color = current.fg;
+      document.getElementById('token-readout').textContent =
+        `Token: ${current.name} · BG ${current.bg} · Ink ${current.fg} · Contrast ${current.ratio}`;
+      swatchRoot.querySelectorAll('button').forEach(b => {
+        b.addEventListener('click', (e) => {
+          activeIdx = Number(e.currentTarget.getAttribute('data-i'));
+          renderTokens();
+        });
+      });
+    }
+    renderTokens();
+  </script>
+</body>
+</html>

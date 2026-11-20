@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amara Okafor — Cloud Infrastructure | SE Class A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --ink: #0f172a; --muted: #475569; --teal: #0f766e; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 20; }
+    .nav { display: flex; justify-content: space-between; align-items: center; height: 68px; }
+    .nav-links { display: flex; gap: 24px; color: var(--muted); font-size: 0.9rem; }
+    .back-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font-size: 0.85rem; font-weight: 500; }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .hero h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.1; margin: 12px 0 18px; text-wrap: balance; }
+    .hero p { color: var(--muted); margin-bottom: 24px; }
+    .btn-teal { background: var(--teal); color: #fff; padding: 11px 22px; border-radius: 8px; font-weight: 600; display: inline-block; border: none; cursor: pointer; }
+    .hero-img { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4/3; }
+    .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+    .rollout-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-top: 20px; }
+    .stage-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+    .stage-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 0.85rem; }
+    .stage-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); font-weight: 600; }
+    .bar-track { height: 12px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin: 14px 0; }
+    .bar-fill { height: 100%; background: var(--teal); transition: width 250ms ease; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    footer { padding: 36px 0; display: flex; justify-content: space-between; color: var(--muted); font-size: 0.88rem; }
+    @media (max-width: 900px) { .hero, .grid-3 { grid-template-columns: 1fr; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#top" style="font-weight:700; font-size:1.05rem;">Amara Okafor</a>
+      <nav class="nav-links">
+        <a href="#canary">Rollout Simulator</a>
+        <a href="#projects">Projects</a>
+        <a href="#stack">Infrastructure</a>
+      </nav>
+      <a href="../../index.html" id="back-gallery" class="back-btn">← Class A Gallery</a>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <div class="hero">
+      <div>
+        <div style="font-size:0.85rem; color:var(--muted);">Software Engineering Class A · Roll SE-A-05 · Cloud Infrastructure</div>
+        <h1>Zero-downtime deployments and resilient container orchestration.</h1>
+        <p>I build predictable release tooling, declarative Terraform modules, and automated canary rollbacks for multi-region cloud services.</p>
+        <a href="#canary" class="btn-teal">Simulate Canary Rollout</a>
+      </div>
+      <div class="hero-img">
+        <img src="/src/assets/images/shot_okafor_harbor_1795057298339.jpg" alt="Harbor Rollout Dashboard" referrerpolicy="no-referrer" />
+      </div>
+    </div>
+
+    <section id="canary">
+      <h2>Harbor Canary Traffic Shifter</h2>
+      <p style="color:var(--muted); margin-top:6px;">Step through progressive traffic shifting across regions with automated SLO verification.</p>
+      <div class="rollout-box">
+        <div class="stage-row" id="stages"></div>
+        <div class="bar-track"><div class="bar-fill" id="bar-fill" style="width:25%;"></div></div>
+        <div class="mono" id="stage-meta" style="font-size:0.88rem; color:var(--muted);"></div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Cloud Projects</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Harbor Deploy CLI</h3><p style="color:var(--muted); margin-top:8px;">Go CLI orchestrating blue/green Docker rollouts with automatic p99 latency checks.</p></div>
+        <div class="card"><h3>NetMesh Policy Linter</h3><p style="color:var(--muted); margin-top:8px;">Static analyzer validating Kubernetes NetworkPolicy manifests against zero-trust rules.</p></div>
+        <div class="card"><h3>S3 Cold-Tier Archiver</h3><p style="color:var(--muted); margin-top:8px;">Concurrent Go worker compressing and indexing application audit logs.</p></div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <h2>Infrastructure Stack</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Orchestration</h3><p style="color:var(--muted); margin-top:8px;">Docker, Kubernetes, Nomad, systemd</p></div>
+        <div class="card"><h3>Backend & Data</h3><p style="color:var(--muted); margin-top:8px;">Go, TypeScript, PostgreSQL, NGINX</p></div>
+        <div class="card"><h3>Observability</h3><p style="color:var(--muted); margin-top:8px;">OpenTelemetry, Prometheus, Structured JSON Logs</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Amara Okafor · Software Engineering Class A</span>
+      <span class="mono">github.com/aokafor-cloud · a.okafor@se-class-a.edu</span>
+    </footer>
+  </main>
+  <script>
+    if (window.self !== window.top) document.getElementById('back-gallery').style.display = 'none';
+    const stages = [
+      { name: 'Stage 1: 10% Canary', pct: 10, info: 'us-east-1 canary active · Error Rate: 0.01% · p99: 14 ms · Status: Passing' },
+      { name: 'Stage 2: 25% Shift', pct: 25, info: 'us-east-1 + eu-central-1 · Error Rate: 0.01% · p99: 15 ms · Status: Passing' },
+      { name: 'Stage 3: 50% Split', pct: 50, info: 'All 3 regions balanced · Error Rate: 0.02% · p99: 16 ms · Status: Passing' },
+      { name: 'Stage 4: 100% Promoted', pct: 100, info: 'Release promoted globally · Old replica set drained safely' }
+    ];
+    let idx = 1;
+    function render() {
+      const root = document.getElementById('stages');
+      root.innerHTML = stages.map((s, i) => `<button class="stage-btn ${i===idx?'active':''}" data-i="${i}">${s.name}</button>`).join('');
+      document.getElementById('bar-fill').style.width = stages[idx].pct + '%';
+      document.getElementById('stage-meta').textContent = stages[idx].info;
+      root.querySelectorAll('button').forEach(b => b.addEventListener('click', e => { idx = Number(e.currentTarget.dataset.i); render(); }));
+    }
+    render();
+  </script>
+</body>
+</html>

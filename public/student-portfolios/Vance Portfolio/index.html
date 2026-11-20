@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marcus Vance — Systems & WebAssembly | SE Class A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg: #111215; --panel: #191b20; --border: rgba(255,255,255,0.1); --text: #f4f4f5; --muted: #a1a1aa; --amber: #f59e0b; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(17,18,21,0.92); backdrop-filter: blur(8px); z-index: 20; }
+    .nav { display: flex; justify-content: space-between; align-items: center; height: 68px; }
+    .nav-links { display: flex; gap: 24px; color: var(--muted); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--text); }
+    .back-btn { border: 1px solid var(--border); background: var(--panel); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
+    .kicker { color: var(--muted); font-size: 0.85rem; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(2.2rem, 3.8vw, 3.2rem); line-height: 1.1; margin-bottom: 18px; text-wrap: balance; }
+    .hero p { color: var(--muted); margin-bottom: 24px; max-width: 56ch; }
+    .btn-amber { background: var(--amber); color: #111; font-weight: 700; padding: 11px 22px; border-radius: 8px; border: none; cursor: pointer; display: inline-block; }
+    .hero-img { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4/3; }
+    .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+    .tabs { display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+    .tab-btn { background: var(--panel); color: var(--muted); border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+    .tab-btn.active { background: var(--amber); color: #111; font-weight: 600; border-color: var(--amber); }
+    .code-box { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; overflow-x: auto; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    .card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: 0.9rem; }
+    footer { padding: 36px 0; display: flex; justify-content: space-between; color: var(--muted); font-size: 0.88rem; }
+    @media (max-width: 900px) { .hero, .grid-3 { grid-template-columns: 1fr; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#top" style="font-weight:700; font-size:1.05rem;">Marcus Vance</a>
+      <nav class="nav-links">
+        <a href="#inspector">Wasm Inspector</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Systems Stack</a>
+      </nav>
+      <a href="../../index.html" id="back-gallery" class="back-btn">← Class A Gallery</a>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <div class="hero">
+      <div>
+        <div class="kicker">Software Engineering Class A · Roll SE-A-03 · Systems & Compilers</div>
+        <h1>Zero-overhead runtimes, bytecode tools, and Rust internals.</h1>
+        <p>I build deterministic debuggers, WebAssembly profilers, and low-level memory tools that keep native performance inspectable inside the browser.</p>
+        <a href="#inspector" class="btn-amber">Inspect Vortex Bytecode Trace</a>
+      </div>
+      <div class="hero-img">
+        <img src="/src/assets/images/shot_vance_vortex_1795057297631.jpg" alt="Vortex WebAssembly Profiler" referrerpolicy="no-referrer" />
+      </div>
+    </div>
+
+    <section id="inspector">
+      <h2>Vortex Wasm Frame Profiler</h2>
+      <p style="color:var(--muted); margin-top:6px;">Switch profiling snapshots to inspect linear memory allocation and hot stack frames.</p>
+      <div class="tabs" id="frame-tabs"></div>
+      <div class="code-box mono" id="frame-output" style="font-size:0.88rem; line-height:1.7;"></div>
+    </section>
+
+    <section id="projects">
+      <h2>Engineering Projects</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Vortex Wasm Runtime</h3>
+          <p>Instrumenting WebAssembly binary sections in Rust with sub-millisecond flamegraph sampling.</p>
+        </div>
+        <div class="card">
+          <h3>Ferrous Allocator</h3>
+          <p>Custom slab & buddy memory allocator benchmarked against jemalloc on Linux x86_64 workloads.</p>
+        </div>
+        <div class="card">
+          <h3>IrTrace LLVM Pass</h3>
+          <p>Compiler pass detecting redundant bounds checks inside hot inner loops.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2>Core Stack</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Languages</h3><p>Rust, C23, TypeScript, WebAssembly Text (WAT)</p></div>
+        <div class="card"><h3>Toolchains</h3><p>LLVM, Cargo, Cranelift, Perf, Valgrind</p></div>
+        <div class="card"><h3>Frontend Viz</h3><p>Canvas 2D Flamegraphs, React, SharedArrayBuffer</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Marcus Vance · Software Engineering Class A</span>
+      <span class="mono">github.com/mvance-sys · m.vance@se-class-a.edu</span>
+    </footer>
+  </main>
+  <script>
+    if (window.self !== window.top) document.getElementById('back-gallery').style.display = 'none';
+    const snapshots = [
+      { label: '01. Mesh Decode (4.2 MB)', fn: 'decode_ply_buffer', pages: '64 pages (4.0 MiB)', time: '0.74 ms', wat: '001 (func $decode_ply (param i32 i32) (result i32)\n002   local.get 0\n003   i32.load offset=16\n004   memory.grow 4\n005   return)' },
+      { label: '02. Matrix Multiply', fn: 'matmul_simd_f32x4', pages: '16 pages (1.0 MiB)', time: '0.29 ms', wat: '001 (func $matmul_simd (param i32)\n002   v128.load align=16\n003   f32x4.mul\n004   f32x4.add\n005   v128.store)' },
+      { label: '03. GC Sweep Pass', fn: 'arena_mark_sweep', pages: '8 pages (512 KiB)', time: '0.18 ms', wat: '001 (func $arena_sweep (result i32)\n002   global.get $heap_ptr\n003   i32.const 1024\n004   i32.sub\n005   global.set $heap_ptr)' }
+    ];
+    let current = 0;
+    function render() {
+      const tabs = document.getElementById('frame-tabs');
+      tabs.innerHTML = snapshots.map((s, i) => `<button class="tab-btn ${i===current?'active':''}" data-i="${i}">${s.label}</button>`).join('');
+      const s = snapshots[current];
+      document.getElementById('frame-output').innerText =
+        `Function: ${s.fn}\nLinear Memory: ${s.pages}\nExecution Window: ${s.time}\n\n${s.wat}`;
+      tabs.querySelectorAll('button').forEach(b => b.addEventListener('click', e => { current = Number(e.currentTarget.dataset.i); render(); }));
+    }
+    render();
+  </script>
+</body>
+</html>

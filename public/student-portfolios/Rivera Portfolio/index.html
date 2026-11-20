@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mateo Rivera — Data Engineering & SQL | SE Class A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg: #fcfbf8; --card: #ffffff; --border: #e5e2da; --ink: #111827; --muted: #4b5563; --navy: #1e3a8a; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid var(--border); background: rgba(252,251,248,0.92); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 20; }
+    .nav { display: flex; justify-content: space-between; align-items: center; height: 68px; }
+    .nav-links { display: flex; gap: 24px; color: var(--muted); font-size: 0.9rem; }
+    .back-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font-size: 0.85rem; }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .hero h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.1; margin: 12px 0 18px; text-wrap: balance; }
+    .hero p { color: var(--muted); margin-bottom: 24px; }
+    .btn-navy { background: var(--navy); color: #fff; padding: 11px 22px; border-radius: 8px; font-weight: 600; display: inline-block; }
+    .hero-img { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4/3; }
+    .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+    .notebook { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-top: 20px; }
+    .q-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .q-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 0.85rem; }
+    .q-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 600; }
+    pre { background: #f3f4f6; padding: 16px; border-radius: 10px; overflow-x: auto; font-size: 0.85rem; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    footer { padding: 36px 0; display: flex; justify-content: space-between; color: var(--muted); font-size: 0.88rem; }
+    @media (max-width: 900px) { .hero, .grid-3 { grid-template-columns: 1fr; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#top" style="font-weight:700; font-size:1.05rem;">Mateo Rivera</a>
+      <nav class="nav-links">
+        <a href="#notebook">SQL Notebook</a>
+        <a href="#projects">Projects</a>
+        <a href="#stack">Data Stack</a>
+      </nav>
+      <a href="../../index.html" id="back-gallery" class="back-btn">← Class A Gallery</a>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <div class="hero">
+      <div>
+        <div style="font-size:0.85rem; color:var(--muted);">Software Engineering Class A · Roll SE-A-08 · Data Platform Engineering</div>
+        <h1>Columnar analytics, Parquet engines, and instant browser SQL.</h1>
+        <p>I build analytical data tools combining Python ETL pipelines, PostgreSQL partitioning, and WebAssembly SQL workbooks.</p>
+        <a href="#notebook" class="btn-navy">Run Strata SQL Presets</a>
+      </div>
+      <div class="hero-img">
+        <img src="/src/assets/images/shot_rivera_strata_1795057298044.jpg" alt="Strata SQL Analytics Notebook" referrerpolicy="no-referrer" />
+      </div>
+    </div>
+
+    <section id="notebook">
+      <h2>Strata Columnar Query Notebook</h2>
+      <p style="color:var(--muted); margin-top:6px;">Select a pre-compiled analytical query over a 1.2M row synthetic sales dataset.</p>
+      <div class="notebook">
+        <div class="q-btns" id="q-btns"></div>
+        <pre class="mono" id="q-sql"></pre>
+        <table>
+          <thead><tr><th>Segment / Region</th><th class="mono">Total Volume</th><th class="mono">Avg Margin</th></tr></thead>
+          <tbody id="q-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Data Engineering Projects</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Strata Stream SQL</h3><p style="color:var(--muted); margin-top:8px;">In-browser DuckDB Wasm notebook executing Parquet predicates with sub-second chart rendering.</p></div>
+        <div class="card"><h3>ParquetSlim Compactor</h3><p style="color:var(--muted); margin-top:8px;">Python CLI optimizing row-group sizes and dictionary encoding on cold data lakes.</p></div>
+        <div class="card"><h3>SchemaDiff Gate</h3><p style="color:var(--muted); margin-top:8px;">CI check catching breaking PostgreSQL column drops before production migrations.</p></div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <h2>Data Stack</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Storage & SQL</h3><p style="color:var(--muted); margin-top:8px;">PostgreSQL, DuckDB Wasm, Apache Parquet, Arrow</p></div>
+        <div class="card"><h3>Languages</h3><p style="color:var(--muted); margin-top:8px;">Python, TypeScript, SQL, WebAssembly</p></div>
+        <div class="card"><h3>UI & Visualization</h3><p style="color:var(--muted); margin-top:8px;">Tailwind CSS, Vega-Lite, Canvas Charts</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Mateo Rivera · Software Engineering Class A</span>
+      <span class="mono">github.com/mrivera-data · m.rivera@se-class-a.edu</span>
+    </footer>
+  </main>
+  <script>
+    if (window.self !== window.top) document.getElementById('back-gallery').style.display = 'none';
+    const queries = [
+      {
+        label: 'Top Regions (0.8s)',
+        sql: "SELECT region, SUM(revenue) AS total_vol, AVG(margin) AS avg_margin\nFROM sales_parquet\nGROUP BY region ORDER BY total_vol DESC LIMIT 3;",
+        rows: [['North America', '$52,400,000', '39.8%'], ['DACH Europe', '$41,120,000', '28.4%'], ['United Kingdom', '$35,080,000', '23.8%']]
+      },
+      {
+        label: 'Cohort Retention (0.4s)',
+        sql: "SELECT cohort_quarter, COUNT(DISTINCT org_id) AS active_orgs, AVG(net_retention) AS nrr\nFROM customer_cohorts\nGROUP BY cohort_quarter ORDER BY cohort_quarter DESC;",
+        rows: [['2026 Q3', '1,420 orgs', '118.4%'], ['2026 Q2', '1,290 orgs', '114.2%'], ['2026 Q1', '1,105 orgs', '109.7%']]
+      }
+    ];
+    let active = 0;
+    function render() {
+      const root = document.getElementById('q-btns');
+      root.innerHTML = queries.map((q, i) => `<button class="q-btn ${i===active?'active':''}" data-i="${i}">${q.label}</button>`).join('');
+      document.getElementById('q-sql').textContent = queries[active].sql;
+      document.getElementById('q-rows').innerHTML = queries[active].rows.map(r =>
+        `<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono">${r[2]}</td></tr>`
+      ).join('');
+      root.querySelectorAll('button').forEach(b => b.addEventListener('click', e => { active = Number(e.currentTarget.dataset.i); render(); }));
+    }
+    render();
+  </script>
+</body>
+</html>

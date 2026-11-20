@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sora Takahashi — Computer Vision & AI | SE Class A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg: #ffffff; --surface: #f8fafc; --border: #e2e8f0; --ink: #0f172a; --muted: #475569; --cobalt: #2563eb; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); z-index: 20; }
+    .nav { display: flex; justify-content: space-between; align-items: center; height: 68px; }
+    .nav-links { display: flex; gap: 24px; color: var(--muted); font-size: 0.9rem; }
+    .back-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 0.85rem; font-weight: 500; }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .hero h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.1; margin: 12px 0 18px; text-wrap: balance; }
+    .hero p { color: var(--muted); margin-bottom: 24px; }
+    .btn-cobalt { background: var(--cobalt); color: #fff; padding: 11px 22px; border-radius: 8px; font-weight: 600; display: inline-block; }
+    .hero-img { border-radius: 16px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4/3; }
+    .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+    .lab-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-top: 20px; }
+    .slider { width: 100%; accent-color: var(--cobalt); margin: 14px 0; }
+    .telemetry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+    .tel-cell { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px; }
+    .card { border: 1px solid var(--border); border-radius: 12px; padding: 22px; background: var(--surface); }
+    footer { padding: 36px 0; display: flex; justify-content: space-between; color: var(--muted); font-size: 0.88rem; }
+    @media (max-width: 900px) { .hero, .telemetry-grid, .grid-3 { grid-template-columns: 1fr; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#top" style="font-weight:700; font-size:1.05rem;">Sora Takahashi</a>
+      <nav class="nav-links">
+        <a href="#gait-lab">Gait Telemetry</a>
+        <a href="#projects">Research</a>
+        <a href="#stack">Stack</a>
+      </nav>
+      <a href="../../index.html" id="back-gallery" class="back-btn">← Class A Gallery</a>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <div class="hero">
+      <div>
+        <div style="font-size:0.85rem; color:var(--muted);">Software Engineering Class A · Roll SE-A-04 · Computer Vision</div>
+        <h1>On-device machine learning for clinical motion analysis.</h1>
+        <p>I design privacy-preserving WebGL and TensorFlow.js vision pipelines that run at 60 frames per second directly in a clinician’s browser.</p>
+        <a href="#gait-lab" class="btn-cobalt">Explore Gait Phase Analyzer</a>
+      </div>
+      <div class="hero-img">
+        <img src="/src/assets/images/shot_takahashi_lumina_1795057297864.jpg" alt="Lumina Pose Lab UI" referrerpolicy="no-referrer" />
+      </div>
+    </div>
+
+    <section id="gait-lab">
+      <h2>Lumina Biomechanical Gait Cycle</h2>
+      <p style="color:var(--muted); margin-top:6px;">Scrub across the 0%–100% stride cycle to inspect joint kinematics.</p>
+      <div class="lab-card">
+        <div class="mono" id="cycle-label">Stride Phase: 24% — Mid-Stance</div>
+        <input type="range" min="0" max="100" value="24" class="slider" id="cycle-slider" />
+        <div class="telemetry-grid">
+          <div class="tel-cell"><div style="font-size:0.82rem; color:var(--muted);">Knee Flexion</div><div class="mono" style="font-size:1.4rem; font-weight:700;" id="knee-val">18.4°</div></div>
+          <div class="tel-cell"><div style="font-size:0.82rem; color:var(--muted);">Hip Extension</div><div class="mono" style="font-size:1.4rem; font-weight:700;" id="hip-val">11.2°</div></div>
+          <div class="tel-cell"><div style="font-size:0.82rem; color:var(--muted);">Ankle Dorsiflexion</div><div class="mono" style="font-size:1.4rem; font-weight:700;" id="ankle-val">6.8°</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Featured Projects</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Lumina Pose Lab</h3><p style="color:var(--muted); margin-top:8px;">Real-time 33-keypoint skeletal tracker exporting clinical CSV stride reports.</p></div>
+        <div class="card"><h3>DepthSlice ONNX</h3><p style="color:var(--muted); margin-top:8px;">Quantized monocular depth estimation compiled to WebGPU compute shaders.</p></div>
+        <div class="card"><h3>SpecLabel Tool</h3><p style="color:var(--muted); margin-top:8px;">Keyboard-first bounding box and polygon annotation studio for medical datasets.</p></div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <h2>Technical Stack</h2>
+      <div class="grid-3">
+        <div class="card"><h3>ML & Vision</h3><p style="color:var(--muted); margin-top:8px;">Python, PyTorch, ONNX Runtime, MediaPipe, OpenCV</p></div>
+        <div class="card"><h3>Web Graphics</h3><p style="color:var(--muted); margin-top:8px;">TypeScript, WebGL 2, WebGPU, Three.js, SVG</p></div>
+        <div class="card"><h3>Honors</h3><p style="color:var(--muted); margin-top:8px;">Dean’s Undergraduate Research Grant 2026</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Sora Takahashi · Software Engineering Class A</span>
+      <span class="mono">github.com/stakahashi-cv · s.takahashi@se-class-a.edu</span>
+    </footer>
+  </main>
+  <script>
+    if (window.self !== window.top) document.getElementById('back-gallery').style.display = 'none';
+    const slider = document.getElementById('cycle-slider');
+    function updateGait(v) {
+      const p = Number(v);
+      const phase = p < 15 ? 'Heel Strike' : p < 45 ? 'Mid-Stance' : p < 65 ? 'Toe-Off' : 'Swing Phase';
+      document.getElementById('cycle-label').textContent = `Stride Phase: ${p}% — ${phase}`;
+      const rad = (p / 100) * Math.PI * 2;
+      document.getElementById('knee-val').textContent = `${(32 + Math.sin(rad - 0.8) * 28).toFixed(1)}°`;
+      document.getElementById('hip-val').textContent = `${(12 + Math.cos(rad) * 18).toFixed(1)}°`;
+      document.getElementById('ankle-val').textContent = `${(4 + Math.sin(rad * 2) * 9).toFixed(1)}°`;
+    }
+    slider.addEventListener('input', e => updateGait(e.target.value));
+    updateGait(24);
+  </script>
+</body>
+</html>

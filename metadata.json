@@ -1,0 +1,8 @@
+{
+  "name": "Remix SE Class A — Portfolio Gallery",
+  "description": "Software Engineering Class A portfolio gallery showcasing student projects, technical skills, and individual standalone portfolio websites.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

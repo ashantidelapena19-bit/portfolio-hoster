@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif-editorial: "Fraunces", Georgia, serif;
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Default semantic palette tokens (Studio Gallery Light)
+   Aligned with .agents/skills/design-taste-frontend/assets/system.css */
+:root {
+  --p-bg: #ffffff;
+  --p-surface: #f3f3f6;
+  --p-surface-subtle: #fafafb;
+  --p-surface-elevated: #ffffff;
+  --p-ink: #0d0c22;
+  --p-ink-secondary: #3d3d4e;
+  --p-muted: #6e6d7a;
+  --p-border: #e7e7e9;
+  --p-border-strong: #c8c8d0;
+  --p-accent: #ea4c89;
+  --p-accent-hover: #d93d79;
+  --p-accent-ink: #ffffff;
+  --p-action: #0d0c22;
+  --p-action-hover: #272640;
+  --p-action-ink: #ffffff;
+  --p-header-bg: rgba(255, 255, 255, 0.94);
+  --p-backdrop: rgba(13, 12, 34, 0.7);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--p-ink);
+    background-color: var(--p-bg);
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  body {
+    color: var(--p-ink);
+    background-color: var(--p-bg);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.text-balance {
+  text-wrap: balance;
+}

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Julian Bond — Distributed Systems Portfolio | SE Class A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --surface: #121824;
+      --surface-2: #182030;
+      --border: rgba(255,255,255,0.09);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #f43f5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+    code, .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 15, 23, 0.9);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      height: 68px;
+    }
+    .brand { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.05rem; white-space: nowrap; }
+    .nav-links { display: flex; gap: 28px; font-size: 0.9rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--text); }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.85rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+    .back-btn:hover { background: var(--surface-2); border-color: rgba(255,255,255,0.2); }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+    .kicker { font-size: 0.85rem; color: var(--muted); margin-bottom: 14px; }
+    .hero h1 { font-size: clamp(2.25rem, 4vw, 3.3rem); line-height: 1.1; margin-bottom: 18px; text-wrap: balance; }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 58ch; margin-bottom: 28px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 150ms ease, opacity 150ms ease;
+    }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .hero-shot {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      aspect-ratio: 4/3;
+    }
+    .hero-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .metrics-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .metric-val { font-size: 1.65rem; font-weight: 700; color: var(--text); }
+    .metric-lbl { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+    section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+    .section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 32px; }
+    .section-head h2 { font-size: 1.75rem; }
+    .section-head p { color: var(--muted); font-size: 0.95rem; }
+    .cluster-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .nodes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .node-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .node-card.down { opacity: 0.55; border-color: rgba(244,63,94,0.45); }
+    .node-top { display: flex; justify-content: space-between; align-items: center; }
+    .node-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .project-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
+    .project-card p { color: var(--muted); font-size: 0.92rem; }
+    .meta-line { font-size: 0.8rem; color: var(--muted); }
+    .skills-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .skill-group { padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+    .skill-group h3 { font-size: 1rem; margin-bottom: 10px; }
+    .skill-group p { color: var(--muted); font-size: 0.9rem; }
+    footer { padding: 36px 0; color: var(--muted); font-size: 0.88rem; display: flex; justify-content: space-between; align-items: center; }
+    @media (max-width: 900px) {
+      .hero-grid, .metrics-strip, .projects-grid, .skills-list, .nodes-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav-inner">
+      <a href="#top" class="brand">Julian Bond</a>
+      <nav class="nav-links">
+        <a href="#simulator">Kestrel Lab</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="../../index.html" id="back-gallery" class="back-btn">← Class A Gallery</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="container">
+      <div class="hero">
+        <div class="hero-grid">
+          <div>
+            <div class="kicker">Software Engineering Class A · Roll SE-A-01 · Distributed Systems</div>
+            <h1>Building fault-tolerant storage engines and observable backends.</h1>
+            <p>
+              I am Julian Bond, a senior Software Engineering student specializing in Go, Raft consensus,
+              and high-throughput backend infrastructure. My capstone work focuses on making distributed
+              state transparent and deterministic under network partitions.
+            </p>
+            <div class="cta-row">
+              <a href="#simulator" class="btn-primary">Inspect Kestrel Raft Lab</a>
+              <button class="btn-secondary" id="copy-email">Copy j.bond@se-class-a.edu</button>
+            </div>
+          </div>
+          <div class="hero-shot">
+            <img src="/src/assets/images/shot_bond_kestrel_1795057299395.jpg" alt="Kestrel Distributed KV Topology UI" referrerpolicy="no-referrer" />
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics-strip">
+        <div>
+          <div class="metric-val mono">99.98%</div>
+          <div class="metric-lbl">Fault Recovery Availability</div>
+        </div>
+        <div>
+          <div class="metric-val mono">1.8 ms</div>
+          <div class="metric-lbl">Median Commit Latency</div>
+        </div>
+        <div>
+          <div class="metric-val mono">42k ops/s</div>
+          <div class="metric-lbl">Sustained Write Throughput</div>
+        </div>
+        <div>
+          <div class="metric-val mono">14</div>
+          <div class="metric-lbl">Course & OSS Repositories</div>
+        </div>
+      </div>
+
+      <section id="simulator">
+        <div class="section-head">
+          <div>
+            <h2>Interactive Raft Quorum Sandbox</h2>
+            <p>Toggle any node offline to observe how Kestrel elects a new leader when majority quorum holds.</p>
+          </div>
+          <button class="btn-secondary" id="write-log">Append KV Entry</button>
+        </div>
+        <div class="cluster-box">
+          <div class="meta-line mono" id="cluster-summary">Term 4 · Leader: node-alpha · Log Index: 128 · Quorum: Healthy (3/3)</div>
+          <div class="nodes-grid" id="nodes-grid"></div>
+        </div>
+      </section>
+
+      <section id="projects">
+        <div class="section-head">
+          <div>
+            <h2>Selected Engineering Work</h2>
+            <p>Core systems built across Software Engineering Class A labs and independent research.</p>
+          </div>
+        </div>
+        <div class="projects-grid">
+          <article class="project-card">
+            <div>
+              <h3>01. Kestrel Distributed KV</h3>
+              <p>Multi-node Raft storage engine in Go with snapshotting, WAL compaction, and live topology graphs.</p>
+            </div>
+            <div class="meta-line">Go · TypeScript · React · WebSockets</div>
+          </article>
+          <article class="project-card">
+            <div>
+              <h3>02. Meridian Rate Limiter</h3>
+              <p>Sliding-window token bucket gateway middleware backed by Redis Lua scripts and Prometheus histograms.</p>
+            </div>
+            <div class="meta-line">Go · Redis · Docker · Grafana</div>
+          </article>
+          <article class="project-card">
+            <div>
+              <h3>03. PgTrace Query Explainer</h3>
+              <p>Browser visualization tool turning raw PostgreSQL EXPLAIN ANALYZE JSON into bottleneck flame charts.</p>
+            </div>
+            <div class="meta-line">TypeScript · PostgreSQL · SVG</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills">
+        <div class="section-head">
+          <div>
+            <h2>Technical Architecture & Tooling</h2>
+            <p>Languages and infrastructure used across production and academic builds.</p>
+          </div>
+        </div>
+        <div class="skills-list">
+          <div class="skill-group">
+            <h3>Systems & Backend</h3>
+            <p>Go, Rust, gRPC, Protobuf, Raft Consensus, TCP Socket Programming</p>
+          </div>
+          <div class="skill-group">
+            <h3>Data & Storage</h3>
+            <p>PostgreSQL, SQLite, Redis, Write-Ahead Logging, B+Tree Indexing</p>
+          </div>
+          <div class="skill-group">
+            <h3>Frontend & Cloud</h3>
+            <p>TypeScript, React, Tailwind CSS, Docker, Linux Namespaces, GitHub Actions</p>
+          </div>
+        </div>
+      </section>
+
+      <footer id="contact">
+        <span>Julian Bond · Software Engineering Class A</span>
+        <span class="mono">github.com/jbond-se · j.bond@se-class-a.edu</span>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    if (window.self !== window.top) {
+      document.getElementById('back-gallery').style.display = 'none';
+    }
+    const copyBtn = document.getElementById('copy-email');
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard?.writeText('j.bond@se-class-a.edu');
+      copyBtn.textContent = 'Copied to Clipboard';
+      setTimeout(() => { copyBtn.textContent = 'Copy j.bond@se-class-a.edu'; }, 2000);
+    });
+
+    const nodes = [
+      { id: 'node-alpha', role: 'Leader', up: true, latency: '1.4 ms' },
+      { id: 'node-beta', role: 'Follower', up: true, latency: '1.9 ms' },
+      { id: 'node-gamma', role: 'Follower', up: true, latency: '2.1 ms' }
+    ];
+    let term = 4;
+    let logIndex = 128;
+
+    function reconcile() {
+      const alive = nodes.filter(n => n.up);
+      if (alive.length >= 2) {
+        if (!alive.some(n => n.role === 'Leader')) {
+          term += 1;
+          nodes.forEach(n => { if (n.role === 'Leader') n.role = 'Follower'; });
+          alive[0].role = 'Leader';
+        }
+      } else {
+        nodes.forEach(n => { n.role = 'Candidate'; });
+      }
+      const leader = nodes.find(n => n.up && n.role === 'Leader');
+      const quorumText = alive.length >= 2 ? `Healthy (${alive.length}/3)` : `Quorum Lost (${alive.length}/3 — Writes Paused)`;
+      document.getElementById('cluster-summary').textContent =
+        `Term ${term} · Leader: ${leader ? leader.id : 'None'} · Log Index: ${logIndex} · Quorum: ${quorumText}`;
+
+      const grid = document.getElementById('nodes-grid');
+      grid.innerHTML = nodes.map((n, idx) => `
+        <div class="node-card ${n.up ? '' : 'down'}">
+          <div class="node-top">
+            <strong class="mono">${n.id}</strong>
+            <button class="node-btn" data-idx="${idx}">${n.up ? 'Simulate Crash' : 'Recover Node'}</button>
+          </div>
+          <div class="meta-line">State: ${n.up ? n.role : 'Offline'} · RTT: ${n.up ? n.latency : '—'}</div>
+          <div class="meta-line mono">Committed Index: ${n.up ? logIndex : logIndex - 2}</div>
+        </div>
+      `).join('');
+
+      grid.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = Number(e.currentTarget.getAttribute('data-idx'));
+          nodes[idx].up = !nodes[idx].up;
+          reconcile();
+        });
+      });
+    }
+
+    document.getElementById('write-log').addEventListener('click', () => {
+      const alive = nodes.filter(n => n.up);
+      if (alive.length >= 2) {
+        logIndex += 1;
+        reconcile();
+      }
+    });
+
+    reconcile();
+  </script>
+</body>
+</html>
